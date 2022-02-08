@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="checkout-title">結帳</div>
     <Checkout id="left-container" />
     <Cart id="right-container" />
   </div>
@@ -80,11 +81,16 @@ button {
   height: 100%;
   margin: 5rem auto;
   display: grid;
+  grid-template-columns: repeat(12, minmax(min-content, 1fr));
+}
+
+.checkout-title {
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 #left-container {
   grid-column: 1 / 7;
-  outline: 2px solid red;
 }
 
 #right-container {
