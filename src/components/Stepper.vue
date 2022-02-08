@@ -9,13 +9,13 @@
     </div>
     <div
       class="stepper"
-      :class="{ active: currentStep > 2, checked: currentStep > 2 }"
+      :class="{ active: currentStep >= 2, checked: currentStep === 3 }"
     >
       <div class="circle"></div>
       <span class="stepper-connect"></span>
       <div class="label">運送方式</div>
     </div>
-    <div class="stepper">
+    <div class="stepper" :class="{ active: currentStep === 3 }">
       <div class="circle"></div>
       <span class="stepper-connect"></span>
       <div class="label">付款資訊</div>
