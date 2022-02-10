@@ -1,28 +1,58 @@
 <template>
   <div class="form-section">
     <div class="form-title">運送方式</div>
-    <div class="delivery-container">
-      <input type="radio" id="standard-delivery" name="delivery" checked />
+    <div
+      class="delivery-container"
+      v-for="delivery in deliveries"
+      :key="delivery.id"
+    >
+      <input
+        type="radio"
+        id="standard-delivery"
+        name="delivery"
+        :checked="delivery.id === 1"
+      />
       <div class="delivery-item">
         <label for="standard-delivery">
-          <div class="delivery-name">標準運送</div>
-          <div class="delivery-day">約3~7個工作天</div>
-          <div class="delivery-fee">免費</div>
-        </label>
-      </div>
-    </div>
-    <div class="delivery-container">
-      <input type="radio" id="DHL-delivery" name="delivery" />
-      <div class="delivery-item">
-        <label for="DHL-delivery">
-          <div class="delivery-name" id="DHL-delivery">DHL 貨運</div>
-          <div class="delivery-day">48小時內送達</div>
-          <div class="delivery-fee">$500</div>
+          <div class="delivery-name">{{ delivery.name }}</div>
+          <div class="delivery-days">{{ delivery.days }}</div>
+          <div class="delivery-fee">{{ delivery.fee | priceFormat }}</div>
         </label>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+const deliveries = [
+  {
+    id: 1,
+    name: '標準運送',
+    days: '約3~7個工作天',
+    fee: 0,
+  },
+  {
+    id: 2,
+    name: 'DHL 貨運',
+    days: '48小時內送達',
+    fee: 500,
+  },
+]
+
+export default {
+  data() {
+    return {
+      deliveries: deliveries,
+    }
+  },
+  filters: {
+    priceFormat(value) {
+      if (value === 0) return '免費'
+      if (value > 0) return '$' + value
+    },
+  },
+}
+</script>
 
 <style>
 .delivery-container {
@@ -54,7 +84,7 @@ input:checked {
 .delivery-name {
   font-size: 14px;
 }
-.delivery-day {
+.delivery-days {
   font-size: 12px;
   font-weight: normal;
 }
@@ -63,8 +93,5 @@ input:checked {
   top: 13px;
   right: 13px;
   font-weight: normal;
-}
-#DHL-delivery {
-  font-weight: 700;
 }
 </style>

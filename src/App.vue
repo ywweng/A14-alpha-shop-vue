@@ -1,20 +1,73 @@
 <template>
   <div id="app">
     <div class="checkout-title">結帳</div>
-    <Checkout id="left-container" />
-    <Cart id="right-container" />
+    <div id="left-container">
+      <Stepper :current-step="currentStep" />
+      <div class="form-panel">
+        <CheckoutAddress class="form-section" v-if="currentStep === 1" />
+        <CheckoutDelivery class="form-section" v-else-if="currentStep === 2" />
+        <CheckoutPayment class="form-section" v-else />
+      </div>
+      <div class="control-btn">
+        <button
+          class="previous-btn"
+          :disabled="currentStep === 1"
+          @click.stop.prevent="prevStep"
+        >
+          ← 上一步
+        </button>
+        <button
+          class="next-btn"
+          :disabled="currentStep === 3"
+          @click.stop.prevent="nextStep"
+        >
+          下一步 ➝
+        </button>
+      </div>
+    </div>
+    <div id="right-container">
+      <div class="cart-panel">
+        <div class="cart-title">購物籃</div>
+        <CartItemCard />
+      </div>
+      <div class="cart-shipping">
+        <span>運費</span><span class="shipping">免費</span>
+      </div>
+      <div class="cart-total">
+        <span>小計</span><span class="total">$5,298</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Checkout from './components/Checkout.vue'
-import Cart from './components/Cart.vue'
+import Stepper from './components/Stepper.vue'
+import CheckoutAddress from './components/CheckoutAddress.vue'
+import CheckoutDelivery from './components/CheckoutDelivery.vue'
+import CheckoutPayment from './components/CheckoutPayment.vue'
+import CartItemCard from './components/CartItemCard.vue'
 
 export default {
   name: 'App',
   components: {
-    Checkout,
-    Cart,
+    Stepper,
+    CheckoutAddress,
+    CheckoutDelivery,
+    CheckoutPayment,
+    CartItemCard,
+  },
+  data() {
+    return {
+      currentStep: 1,
+    }
+  },
+  methods: {
+    nextStep() {
+      this.currentStep++
+    },
+    prevStep() {
+      this.currentStep--
+    },
   },
 }
 </script>
@@ -89,13 +142,81 @@ button {
   font-weight: 700;
 }
 
+/* left container */
+
 #left-container {
   grid-column: 1 / 7;
 }
+.form-panel {
+  height: 20rem;
+}
+
+.control-btn {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.5rem 0;
+  border-top: 1px solid #e6e6eb;
+  position: relative;
+  bottom: -8%;
+}
+
+.previous-btn {
+  border: none;
+  background: none;
+  margin-right: 40%;
+  cursor: pointer;
+}
+
+.previous-btn[disabled] {
+  display: block;
+  visibility: hidden;
+}
+
+.next-btn {
+  flex: 1;
+  min-width: max-content;
+  height: 46px;
+  border: none;
+  border-radius: 8px;
+  background: #f67599;
+  color: white;
+  cursor: pointer;
+}
+
+/* left container end */
 
 #right-container {
   grid-column: 8 / 13;
-  outline: 2px solid blue;
   margin-top: 5rem;
+  width: 100%;
+  height: fit-content;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  border: 1px solid #f0f0f5;
+  border-radius: 8px;
+  margin-top: 20%;
+}
+
+.item-card {
+  outline: 2px solid green;
+}
+
+.cart-title {
+  margin-bottom: 1rem;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.cart-shipping,
+.cart-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0 2rem 0;
+  border-top: 1px solid #f0f0f5;
+}
+
+.shipping,
+.total {
+  font-weight: 700;
 }
 </style>
