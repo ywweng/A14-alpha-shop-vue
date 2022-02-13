@@ -51,6 +51,7 @@ import CheckoutAddress from './components/CheckoutAddress.vue'
 import CheckoutDelivery from './components/CheckoutDelivery.vue'
 import CheckoutPayment from './components/CheckoutPayment.vue'
 import CartItemCard from './components/CartItemCard.vue'
+import { priceFormat } from './utils/mixins'
 
 export default {
   name: 'App',
@@ -69,6 +70,7 @@ export default {
       total: 0,
     }
   },
+  mixins: [priceFormat],
   methods: {
     nextStep() {
       this.currentStep++
@@ -90,11 +92,6 @@ export default {
         total += productsTotal
       })
       this.total = this.deliveryFee + total
-    },
-  },
-  filters: {
-    priceFormat(price) {
-      return '$' + price.toString().replace(/(\d)(?=(\d{3})+(\.\d+)?$)/g, '$1,')
     },
   },
   watch: {

@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { priceFormat } from './../utils/mixins'
+
 const products = [
   {
     id: 1,
@@ -49,21 +51,12 @@ export default {
       products: products,
     }
   },
+  mixins: [priceFormat],
   methods: {
     countMinus(product) {
       if (product.count > 0) {
         product.count--
-        this.$emit('update-products', products)
       }
-    },
-    countPlus(product) {
-      product.count++
-      this.$emit('update-products', products)
-    },
-  },
-  filters: {
-    priceFormat(price) {
-      return '$' + price.toString().replace(/(\d)(?=(\d{3})+(\.\d+)?$)/g, '$1,')
     },
   },
   created() {
