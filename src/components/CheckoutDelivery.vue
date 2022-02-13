@@ -11,6 +11,7 @@
         id="standard-delivery"
         name="delivery"
         :checked="delivery.id === 1"
+        @click.stop="handleDeliveryFee(delivery.fee)"
       />
       <div class="delivery-item">
         <label for="standard-delivery">
@@ -44,6 +45,11 @@ export default {
     return {
       deliveries: deliveries,
     }
+  },
+  methods: {
+    handleDeliveryFee(fee) {
+      this.$emit('update-delivery-fee', fee)
+    },
   },
   filters: {
     priceFormat(value) {

@@ -5,7 +5,11 @@
       <Stepper :current-step="currentStep" />
       <div class="form-panel">
         <CheckoutAddress class="form-section" v-if="currentStep === 1" />
-        <CheckoutDelivery class="form-section" v-else-if="currentStep === 2" />
+        <CheckoutDelivery
+          class="form-section"
+          @update-delivery-fee="updateDeliveryFee"
+          v-else-if="currentStep === 2"
+        />
         <CheckoutPayment class="form-section" v-else />
       </div>
       <div class="control-btn">
@@ -28,13 +32,14 @@
     <div id="right-container">
       <div class="cart-panel">
         <div class="cart-title">購物籃</div>
-        <CartItemCard />
+        <CartItemCard @update-products="handleProducts" />
       </div>
       <div class="cart-shipping">
-        <span>運費</span><span class="shipping">免費</span>
+        <span>運費</span
+        ><span class="shipping">{{ deliveryFee | priceFormat }}</span>
       </div>
       <div class="cart-total">
-        <span>小計</span><span class="total">$5,298</span>
+        <span>小計</span><span>{{ total | priceFormat }}</span>
       </div>
     </div>
   </div>
@@ -59,6 +64,9 @@ export default {
   data() {
     return {
       currentStep: 1,
+      deliveryFee: 0,
+      products: [],
+      total: 0,
     }
   },
   methods: {
@@ -67,6 +75,34 @@ export default {
     },
     prevStep() {
       this.currentStep--
+    },
+    updateDeliveryFee(fee) {
+      this.deliveryFee = fee
+      this.calculatedTotal()
+    },
+    handleProducts(products) {
+      this.products = products
+    },
+    calculatedTotal() {
+      let total = 0
+      this.products.forEach((product) => {
+        let productsTotal = product.count * product.price
+        total += productsTotal
+      })
+      this.total = this.deliveryFee + total
+    },
+  },
+  filters: {
+    priceFormat(price) {
+      return '$' + price.toString().replace(/(\d)(?=(\d{3})+(\.\d+)?$)/g, '$1,')
+    },
+  },
+  watch: {
+    products: {
+      handler: function () {
+        this.calculatedTotal()
+      },
+      deep: true,
     },
   },
 }

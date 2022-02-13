@@ -7,9 +7,17 @@
       <div class="item-content">
         <div class="item-title">{{ product.name }}</div>
         <div class="item-count">
-          <button class="count-btn" id="count-minus">-</button>
-          <span class="count">1</span>
-          <button class="count-btn" id="count-plus">+</button>
+          <button
+            class="count-btn"
+            id="count-minus"
+            @click="countMinus(product)"
+          >
+            -
+          </button>
+          <span class="count">{{ product.count }}</span>
+          <button class="count-btn" id="count-plus" @click="product.count++">
+            +
+          </button>
         </div>
         <div class="item-price">{{ product.price | priceFormat }}</div>
       </div>
@@ -24,12 +32,14 @@ const products = [
     name: '破壞補丁修身牛仔褲',
     image: require('./../assets/item1.png'),
     price: 3999,
+    count: 1,
   },
   {
     id: 2,
     name: '刷色牛仔褲',
     image: require('./../assets/item2.png'),
     price: 1299,
+    count: 1,
   },
 ]
 
@@ -39,10 +49,25 @@ export default {
       products: products,
     }
   },
+  methods: {
+    countMinus(product) {
+      if (product.count > 0) {
+        product.count--
+        this.$emit('update-products', products)
+      }
+    },
+    countPlus(product) {
+      product.count++
+      this.$emit('update-products', products)
+    },
+  },
   filters: {
     priceFormat(price) {
       return '$' + price.toString().replace(/(\d)(?=(\d{3})+(\.\d+)?$)/g, '$1,')
     },
+  },
+  created() {
+    this.$emit('update-products', products)
   },
 }
 </script>
