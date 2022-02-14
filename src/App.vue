@@ -20,11 +20,8 @@
         >
           ← 上一步
         </button>
-        <button
-          class="next-btn"
-          :disabled="currentStep === 3"
-          @click.stop.prevent="nextStep"
-        >
+        <button class="next-btn" v-if="currentStep === 3">確認下單</button>
+        <button class="next-btn" v-else @click.stop.prevent="nextStep">
           下一步 ➝
         </button>
       </div>
@@ -92,6 +89,11 @@ export default {
         total += productsTotal
       })
       this.total = this.deliveryFee + total
+    },
+  },
+  filters: {
+    confirmed() {
+      if (this.currentStep === 3) return '確認下單'
     },
   },
   watch: {
